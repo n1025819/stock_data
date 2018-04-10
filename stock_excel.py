@@ -6,8 +6,8 @@ import datetime
 
 app=xw.App(visible=True,add_book=False)
 app.display_alerts=False
-app.screen_updating=False
-filepath=r'F:\工作\三只牛股推荐记录 (自动保存的).xlsx'
+app.screen_updating=True
+filepath=r'F:\工作\贾杰股票战绩统计.xlsx'
 wb=app.books.open(filepath)
 
 #a推荐时间	b代码	c简称	d更新时间	e最新价	f今日涨跌幅	g建仓价	h最大盈利
@@ -33,5 +33,7 @@ def input_data(sheet_name):
 if __name__=='__main__':
 	a=input("请输入表名:")
 	input_data(a)
+	wb.save()
+	app.quit()
 
 

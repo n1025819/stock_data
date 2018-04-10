@@ -38,7 +38,11 @@ class stock(object):
 
 	def highest_price(self,start='20180101',end=time_now): #通过价格列表计算区间内最高价data_list[i][4]
 		data_list=self.get_data(start,end)
-		highest=float(data_list[0].split(',')[4])
+		try:
+			highest=float(data_list[0].split(',')[4])
+		except IndexError:
+			highest=float(self.sina_data_list[4])
+		
 		for i in data_list:
 			temp_high=float(i.split(',')[4])
 			if temp_high>highest:
@@ -55,19 +59,25 @@ class stock(object):
 		new_price=self.sina_data_list[3]
 		return new_price
 
-	def get_buy_price(self,date_open=yesterday,date_close=time_now): #获取建仓日开盘价
+	def get_buy_price(self,date_open='20180101',date_close=time_now): #获取建仓日开盘价
 		data_list=self.get_data(date_open,date_close)
-		return data_list[-1].split(',')[6]
+		if data_list != []:
+			return data_list[-1].split(',')[6]
+		else:
+			return self.sina_data_list[1]
 	
 	def get_CHG(self): #获取今日涨跌幅
-		new_price=(float(self.sina_data_list[3])-float(self.sina_data_list[1]))/float(self.sina_data_list[3])
-		return new_price
+		if float(self.sina_data_list[1]) == 0:
+			CHG='未开盘'
+		else:
+			CHG=(float(self.sina_data_list[3])-float(self.sina_data_list[1]))/float(self.sina_data_list[3])
+		return CHG
 
 	def get_new_date(self): #获取最新更新时间
 		new_date=self.sina_data_list[-3]+' '+self.sina_data_list[-2]
 		return new_date
 
-	def get_name(self,date_open=yesterday,date_close=time_now): #获取名称
+	def get_name(self,date_open='20180101',date_close=time_now): #获取名称
 		data_list=self.get_data(date_open,date_close)
 		return data_list[-1].split(',')[2]
 
